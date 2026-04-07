@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+    <PropertyGroup>
+        <TargetFramework>$(WindowsTargetFramework)</TargetFramework>
+        <OutputType>Exe</OutputType>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <FrameworkReference Include="Microsoft.AspNetCore.App" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="9.0.4" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\UniGetUI.Core.Classes\UniGetUI.Core.Classes.csproj" />
+        <ProjectReference Include="..\UniGetUI.Core.Data\UniGetUI.Core.Data.csproj" />
+        <ProjectReference Include="..\UniGetUI.Core.Logger\UniGetUI.Core.Logging.csproj" />
+        <ProjectReference Include="..\UniGetUI.Core.Settings\UniGetUI.Core.Settings.csproj" />
+        <ProjectReference Include="..\UniGetUI.Core.Tools\UniGetUI.Core.Tools.csproj" />
+        <ProjectReference Include="..\UniGetUI.PackageEngine.PackageEngine\UniGetUI.PackageEngine.PEInterface.csproj" />
+        <ProjectReference Include="..\UniGetUI.PackageEngine.Serializable\UniGetUI.PackageEngine.Serializable.csproj" />
+        <ProjectReference Include="..\UniGetUI.Interface.BackgroundApi\UniGetUI.Interface.BackgroundApi.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Include="..\SharedAssemblyInfo.cs" Link="SharedAssemblyInfo.cs" />
+    </ItemGroup>
+</Project>
