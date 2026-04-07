@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using UniGetUI.Core.Data;
 using UniGetUI.PackageEngine;
 using UniGetUI.PackageEngine.Interfaces;
