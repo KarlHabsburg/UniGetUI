@@ -2,6 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using UniGetUI.Agent;
+using UniGetUI.Agent.Enrollment;
 using UniGetUI.Agent.Operations;
 using UniGetUI.Core.Data;
 
@@ -21,6 +22,10 @@ builder.Services.AddSingleton(config);
 // Configure logging — filter out credential material
 builder.Logging.AddFilter("Microsoft.AspNetCore", LogLevel.Warning);
 builder.Logging.AddFilter("Microsoft.Hosting", LogLevel.Information);
+
+// Register enrollment infrastructure
+builder.Services.AddSingleton<CredentialStore>();
+builder.Services.AddSingleton<EnrollmentClient>();
 
 // Register operation infrastructure
 string dbPath = Path.Join(CoreData.UniGetUIDataDirectory, "agent-operations.db");
