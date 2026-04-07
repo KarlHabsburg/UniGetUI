@@ -7,6 +7,7 @@ import { sql } from "drizzle-orm";
 import { registerAuth } from "./auth/hooks.js";
 import { initOidc } from "./auth/oidc.js";
 import { registerEnrollmentRoutes } from "./enrollment/routes.js";
+import { registerOperationRoutes } from "./operations/routes.js";
 import { handleAgentSocket, addBrowserSocket } from "./protocol/agentHandler.js";
 
 const PORT = parseInt(process.env.PORT ?? "3000", 10);
@@ -29,6 +30,7 @@ export async function buildApp() {
 
   // Routes
   await registerEnrollmentRoutes(app);
+  await registerOperationRoutes(app);
 
   // Health check
   app.get("/api/health", async (_request, reply) => {
