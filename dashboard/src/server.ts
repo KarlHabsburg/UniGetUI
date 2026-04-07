@@ -11,6 +11,7 @@ import { registerOperationRoutes } from "./operations/routes.js";
 import { registerPolicyRoutes } from "./policies/routes.js";
 import { registerApprovalRoutes } from "./approvals/routes.js";
 import { registerAuditExportRoutes } from "./audit/export.js";
+import { registerGroupRoutes } from "./groups/routes.js";
 import { handleAgentSocket, addBrowserSocket } from "./protocol/agentHandler.js";
 
 const PORT = parseInt(process.env.PORT ?? "3000", 10);
@@ -37,6 +38,7 @@ export async function buildApp() {
   await registerPolicyRoutes(app);
   await registerApprovalRoutes(app);
   await registerAuditExportRoutes(app);
+  await registerGroupRoutes(app);
 
   // Health check
   app.get("/api/health", async (_request, reply) => {

@@ -24,6 +24,36 @@ public sealed class DashboardConnection : IDisposable
     public event Action<string>? OnMessageReceived;
     public bool IsConnected => _ws?.State == WebSocketState.Open;
 
+    // Degraded mode state machine: Connected → Disconnected (within TTL) → Degraded (TTL expired)
+    public ConnectionState State { get; private set; } = ConnectionState.Disconnected;
+    private DateTime _disconnectedAt = DateTime.MinValue;
+    private int _policyTtlSeconds = 3600; // default 1 hour
+
+    public void SetPolicyTtl(int ttlSeconds) => _policyTtlSeconds = ttlSeconds;
+
+    public bool IsDegraded => State == ConnectionState.Degraded;
+
+    private void UpdateConnectionState()
+    {
+        if (_ws?.State == WebSocketState.Open)
+        {
+            State = ConnectionState.Connected;
+            return;
+        }
+
+        if (State == ConnectionState.Connected)
+        {
+            State = ConnectionState.Disconnected;
+            _disconnectedAt = DateTime.UtcNow;
+        }
+        else if (State == ConnectionState.Disconnected &&
+                 DateTime.UtcNow - _disconnectedAt > TimeSpan.FromSeconds(_policyTtlSeconds))
+        {
+            State = ConnectionState.Degraded;
+            _logger.LogWarning("Policy TTL expired — agent entering degraded mode. All operations blocked.");
+        }
+    }
+
     public DashboardConnection(AgentCredential credential, ILogger<DashboardConnection> logger)
     {
         _credential = credential;
@@ -51,6 +81,8 @@ public sealed class DashboardConnection : IDisposable
             }
 
             if (ct.IsCancellationRequested) break;
+
+            UpdateConnectionState();
 
             int delay = BackoffSeconds[Math.Min(_reconnectAttempt, BackoffSeconds.Length - 1)];
             _logger.LogInformation("Reconnecting in {Delay}s (attempt {Attempt})...", delay, _reconnectAttempt + 1);
@@ -164,4 +196,11 @@ public sealed class DashboardConnection : IDisposable
         _disposed = true;
         _ws?.Dispose();
     }
+}
+
+public enum ConnectionState
+{
+    Connected,
+    Disconnected,
+    Degraded,
 }
