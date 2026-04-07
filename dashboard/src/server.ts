@@ -4,6 +4,8 @@ import websocket from "@fastify/websocket";
 import { db } from "./db/connection.js";
 import { agents } from "./db/schema.js";
 import { sql } from "drizzle-orm";
+import { registerAuth } from "./auth/hooks.js";
+import { initOidc } from "./auth/oidc.js";
 
 const PORT = parseInt(process.env.PORT ?? "3000", 10);
 const HOST = process.env.HOST ?? "0.0.0.0";
@@ -17,6 +19,11 @@ export async function buildApp() {
 
   await app.register(cors, { origin: true });
   await app.register(websocket);
+
+  // Auth
+  const oidcReady = await initOidc();
+  app.log.info(oidcReady ? "OIDC authentication enabled" : "OIDC not configured — local auth only");
+  await registerAuth(app);
 
   // Health check
   app.get("/api/health", async (_request, reply) => {
