@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
+using UniGetUI.Core.Data;
 
 namespace UniGetUI.Agent.Protocol;
 
@@ -27,7 +28,7 @@ public sealed class PolicyEnforcer
     /// </summary>
     public void UpdatePolicy(string policyJson, int ttlSeconds)
     {
-        _currentPolicy = JsonSerializer.Deserialize<PolicyDocument>(policyJson);
+        _currentPolicy = JsonSerializer.Deserialize<PolicyDocument>(policyJson, SerializationHelpers.DefaultOptions);
         _policyExpiresAt = DateTime.UtcNow.AddSeconds(ttlSeconds);
         _logger.LogInformation("Policy updated. TTL: {TTL}s, expires at {Expires}", ttlSeconds, _policyExpiresAt);
     }

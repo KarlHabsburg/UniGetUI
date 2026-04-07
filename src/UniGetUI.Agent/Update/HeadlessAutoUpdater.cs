@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
+using UniGetUI.Core.Data;
 
 namespace UniGetUI.Agent.Update;
 
@@ -45,7 +46,7 @@ public sealed class HeadlessAutoUpdater
         try
         {
             var response = await httpClient.GetStringAsync(_updateUrl, ct);
-            productInfo = JsonSerializer.Deserialize<ProductInfo>(response);
+            productInfo = JsonSerializer.Deserialize<ProductInfo>(response, SerializationHelpers.DefaultOptions);
         }
         catch (Exception ex)
         {

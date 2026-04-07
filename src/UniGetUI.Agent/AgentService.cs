@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using UniGetUI.Core.Data;
 using UniGetUI.Core.Logging;
+using UniGetUI.Core.Data;
 using UniGetUI.Core.Tools;
 using UniGetUI.PackageEngine;
 using UniGetUI.PackageEngine.Interfaces;
@@ -113,7 +114,7 @@ public sealed class AgentService : BackgroundService
         };
 
         context.Response.ContentType = "application/json";
-        await context.Response.WriteAsync(JsonSerializer.Serialize(health));
+        await context.Response.WriteAsync(JsonSerializer.Serialize(health, SerializationHelpers.DefaultOptions));
     }
 
     private async Task ManagersEndpoint(HttpContext context)
@@ -127,7 +128,7 @@ public sealed class AgentService : BackgroundService
         });
 
         context.Response.ContentType = "application/json";
-        await context.Response.WriteAsync(JsonSerializer.Serialize(managers));
+        await context.Response.WriteAsync(JsonSerializer.Serialize(managers, SerializationHelpers.DefaultOptions));
     }
 
     private void LogAvailableManagers()

@@ -1,6 +1,7 @@
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using UniGetUI.Agent.Operations;
+using UniGetUI.Core.Data;
 using UniGetUI.PackageEngine;
 using UniGetUI.PackageEngine.Interfaces;
 using UniGetUI.PackageEngine.PackageLoader;
@@ -36,7 +37,7 @@ public sealed class OperationReceiver
     /// </summary>
     public async Task HandleOperationPush(string json)
     {
-        var msg = JsonSerializer.Deserialize<OperationPushMessage>(json);
+        var msg = JsonSerializer.Deserialize<OperationPushMessage>(json, SerializationHelpers.DefaultOptions);
         if (msg is null || msg.Type != "operation_push")
         {
             _logger.LogWarning("Invalid operation push message");

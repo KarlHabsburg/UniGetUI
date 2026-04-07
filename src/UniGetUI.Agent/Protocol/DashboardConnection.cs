@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using UniGetUI.Agent.Enrollment;
+using UniGetUI.Core.Data;
 
 namespace UniGetUI.Agent.Protocol;
 
@@ -113,7 +114,7 @@ public sealed class DashboardConnection : IDisposable
             agentId = _credential.AgentId,
             secret = _credential.Secret,
             protocolVersion = PROTOCOL_VERSION,
-        });
+        }, SerializationHelpers.DefaultOptions);
         await SendRawAsync(authMsg, ct);
 
         // Wait for ack
@@ -123,7 +124,7 @@ public sealed class DashboardConnection : IDisposable
             throw new InvalidOperationException("No response to auth message");
         }
 
-        var parsed = JsonSerializer.Deserialize<JsonElement>(response);
+        var parsed = JsonSerializer.Deserialize<JsonElement>(response, SerializationHelpers.DefaultOptions);
         var msgType = parsed.GetProperty("type").GetString();
 
         if (msgType == "revoked")
@@ -153,7 +154,7 @@ public sealed class DashboardConnection : IDisposable
 
     public async Task SendAsync(object message, CancellationToken ct = default)
     {
-        var json = JsonSerializer.Serialize(message);
+        var json = JsonSerializer.Serialize(message, SerializationHelpers.DefaultOptions);
         await SendRawAsync(json, ct);
     }
 

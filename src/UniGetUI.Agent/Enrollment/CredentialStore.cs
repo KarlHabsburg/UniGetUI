@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using UniGetUI.Core.Data;
+using UniGetUI.Core.Tools;
 
 namespace UniGetUI.Agent.Enrollment;
 
@@ -32,7 +33,7 @@ public sealed class CredentialStore
     /// </summary>
     public void Save(AgentCredential credential)
     {
-        var json = JsonSerializer.Serialize(credential);
+        var json = JsonSerializer.Serialize(credential, SerializationHelpers.DefaultOptions);
         var plainBytes = Encoding.UTF8.GetBytes(json);
 
         var encryptedBytes = ProtectedData.Protect(
@@ -71,7 +72,7 @@ public sealed class CredentialStore
             );
 
             var json = Encoding.UTF8.GetString(plainBytes);
-            var credential = JsonSerializer.Deserialize<AgentCredential>(json);
+            var credential = JsonSerializer.Deserialize<AgentCredential>(json, SerializationHelpers.DefaultOptions);
             _logger.LogInformation("Agent credential loaded (agent ID: {AgentId})", credential?.AgentId);
             return credential;
         }
