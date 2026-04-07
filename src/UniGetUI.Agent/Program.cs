@@ -2,6 +2,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using UniGetUI.Agent;
+using UniGetUI.Agent.Operations;
+using UniGetUI.Core.Data;
 
 var builder = Host.CreateApplicationBuilder(args);
 
@@ -19,6 +21,12 @@ builder.Services.AddSingleton(config);
 // Configure logging — filter out credential material
 builder.Logging.AddFilter("Microsoft.AspNetCore", LogLevel.Warning);
 builder.Logging.AddFilter("Microsoft.Hosting", LogLevel.Information);
+
+// Register operation infrastructure
+string dbPath = Path.Join(CoreData.UniGetUIDataDirectory, "agent-operations.db");
+builder.Services.AddSingleton(new OperationLogStore(dbPath));
+builder.Services.AddSingleton<AgentOperationQueue>();
+builder.Services.AddSingleton<AgentOperationRegistry>();
 
 // Register the agent service
 builder.Services.AddHostedService<AgentService>();
