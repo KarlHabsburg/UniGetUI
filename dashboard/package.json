@@ -1,0 +1,30 @@
+{
+  "name": "unigetui-dashboard",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "fastify": "^5.3.3",
+    "@fastify/websocket": "^11.0.2",
+    "@fastify/jwt": "^9.0.0",
+    "@fastify/cors": "^11.0.0",
+    "drizzle-orm": "^0.44.2",
+    "postgres": "^3.4.7"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.3",
+    "drizzle-kit": "^0.31.1",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.3"
+  }
+}
