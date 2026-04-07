@@ -1,5 +1,4 @@
 using System.Text.Json;
-using Microsoft.Extensions.Logging;
 using UniGetUI.Agent.Operations;
 using UniGetUI.Core.Data;
 using UniGetUI.PackageEngine;

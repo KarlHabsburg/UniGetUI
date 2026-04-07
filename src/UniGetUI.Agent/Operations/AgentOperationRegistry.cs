@@ -1,4 +1,3 @@
-using Microsoft.Extensions.Logging;
 using UniGetUI.PackageEngine.Enums;
 using UniGetUI.PackageOperations;
 
