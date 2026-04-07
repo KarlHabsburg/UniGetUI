@@ -2,6 +2,9 @@ import { BrowserRouter, Routes, Route, NavLink } from "react-router-dom";
 import { FleetOverview } from "./pages/FleetOverview";
 import { MachineDetail } from "./pages/MachineDetail";
 import { Operations } from "./pages/Operations";
+import { Policies } from "./pages/Policies";
+import { Approvals } from "./pages/Approvals";
+import { AuditLog } from "./pages/AuditLog";
 
 export function App() {
   return (
@@ -19,6 +22,9 @@ export function App() {
           </div>
           <NavItem to="/" label="Fleet Overview" />
           <NavItem to="/operations" label="Operations" />
+          <NavItem to="/policies" label="Policies" />
+          <NavItem to="/approvals" label="Approvals" />
+          <NavItem to="/audit" label="Audit Log" />
         </nav>
 
         <main style={{ flex: 1, padding: 24 }}>
@@ -26,6 +32,9 @@ export function App() {
             <Route path="/" element={<FleetOverview />} />
             <Route path="/machines/:id" element={<MachineDetail />} />
             <Route path="/operations" element={<Operations />} />
+            <Route path="/policies" element={<Policies />} />
+            <Route path="/approvals" element={<Approvals />} />
+            <Route path="/audit" element={<AuditLog />} />
           </Routes>
         </main>
       </div>
