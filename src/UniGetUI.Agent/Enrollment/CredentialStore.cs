@@ -1,9 +1,7 @@
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
-using Microsoft.Extensions.Logging;
 using UniGetUI.Core.Data;
-using UniGetUI.Core.Tools;
 
 namespace UniGetUI.Agent.Enrollment;
 

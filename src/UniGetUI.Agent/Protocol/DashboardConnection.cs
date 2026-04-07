@@ -1,7 +1,6 @@
 using System.Net.WebSockets;
 using System.Text;
 using System.Text.Json;
-using Microsoft.Extensions.Logging;
 using UniGetUI.Agent.Enrollment;
 using UniGetUI.Core.Data;
 
