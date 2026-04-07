@@ -7,6 +7,7 @@ import { sql } from "drizzle-orm";
 import { registerAuth } from "./auth/hooks.js";
 import { initOidc } from "./auth/oidc.js";
 import { registerEnrollmentRoutes } from "./enrollment/routes.js";
+import { handleAgentSocket, addBrowserSocket } from "./protocol/agentHandler.js";
 
 const PORT = parseInt(process.env.PORT ?? "3000", 10);
 const HOST = process.env.HOST ?? "0.0.0.0";
@@ -55,16 +56,15 @@ export async function buildApp() {
     }
   });
 
-  // WebSocket endpoint for agent connections (placeholder for Unit 7)
-  app.get("/ws/agent", { websocket: true }, (socket, _request) => {
-    socket.on("message", (message: Buffer) => {
-      app.log.info("Agent message received: %s", message.toString().slice(0, 200));
-      socket.send(JSON.stringify({ type: "ack" }));
-    });
+  // WebSocket endpoint for agent connections
+  app.get("/ws/agent", { websocket: true }, (socket, request) => {
+    const sourceIp = request.ip;
+    handleAgentSocket(socket, sourceIp, app.log);
+  });
 
-    socket.on("close", () => {
-      app.log.info("Agent WebSocket disconnected");
-    });
+  // WebSocket endpoint for browser clients (operation log streaming)
+  app.get("/ws/dashboard", { websocket: true }, (socket, _request) => {
+    addBrowserSocket(socket);
   });
 
   return app;
